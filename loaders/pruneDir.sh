@@ -3,19 +3,16 @@
 if [ -z "$1" ] || [ -z "$2" ]
   then
     echo "Usage:pruneDir.sh <dirname> <time> [delete]"
-    echo "Prunes directory of all files and folders that have not been modified in at leas\
-t n minutes"
+    echo "Prunes directory of all files and folders that have not been modified in at least n minutes"
     echo "dirname: directory name to look in for folders containing files. Prepended with"
     echo "root directory of GOBII install"
     echo "time: maximum number of minutes before now to consider 'recently modified'"
-    echo "delete: if 'delete' is the third argument, deletes files, otherwise runs in 'deb\
-ug' mode"
+    echo "delete: if 'delete' is the third argument, deletes files, otherwise runs in 'debug' mode"
     echo "in folder modification times . Example:"
     echo "  > ./pruneDir.sh logs 60 delete"
     echo "    removes files and folders older than one hour in the logs directory"
     echo "  > ./pruneDir.sh crops/test/files 1440"
-    echo "    declares files and folders older than one hour in the test crops files direc\
-tory that will be removed if command is rerun with 'delete'"
+    echo "    declares files and folders older than one hour in the test crops files directory that will be removed if command is rerun with 'delete'"
     exit
 fi
 
