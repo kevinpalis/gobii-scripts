@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<InputType>
+    <typeName>NUCLEOTIDE_2_LETTER</typeName>
+    <outTypeName>NUCLEOTIDE_2_LETTER</outTypeName>
+    <size>2</size>
+    <transform>
+        <class>org.gobiiproject.gobiiprocess.digester.HelperFunctions.Transforms.ScriptTransform</class>
+		<argument>python etc/SNPSepRemoval.py</argument>
+		<argument>etc/missingIndicators.txt</argument>
+    </transform>
+</InputType>

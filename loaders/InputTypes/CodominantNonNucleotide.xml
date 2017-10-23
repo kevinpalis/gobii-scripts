@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<InputType>
+    <typeName>CO_DOMINANT_NON_NUCLEOTIDE</typeName>
+    <outTypeName>CO_DOMINANT_NON_NUCLEOTIDE</outTypeName>
+    <size>1</size>
+    <transform>
+        <class>org.gobiiproject.gobiiprocess.digester.HelperFunctions.Transforms.StripHeaderTransform</class>
+    </transform>
+</InputType>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<InputType>
+    <typeName>Banana</typeName>
+    <outTypeName>Orange</outTypeName>
+    <size>2</size>
+    <transform>
+        <class>org.gobiiproject.gobiiprocess.digest.Matrix.IUPACToBI</class>
+    </transform>
+    <transform>
+        <class>org.gobiiproject.gobiiprocess.digest.Matrix.PythonCall</class>
+        <argument>etc/IUPACtoBI.pl</argument>
+        <argument>missingIndicators.txt</argument>
+    </transform>
+</InputType>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<InputType>
+    <typeName>SSR_ALLELE_SIZE</typeName>
+    <outTypeName>SSR_ALLELE_SIZE</outTypeName>
+    <size>8</size>
+    <transform>
+        <class>org.gobiiproject.gobiiprocess.digester.HelperFunctions.Transforms.StripHeaderTransform</class>
+    </transform>
+</InputType>
