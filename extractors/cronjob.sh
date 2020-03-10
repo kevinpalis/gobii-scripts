@@ -31,7 +31,7 @@ do
 	if [[ $entry = *.json ]]
 	then
 	  extractorname=$root"crops/"$crop"/extractor"
-	  mv $extractorname"/instructions/"$entry $extractorname"/inprogress/"$entry
+	  mv $extractorname"/instructions/"$entry $extractorname"/inprogress/"$entry || exit 1
 	  java -jar $root"core/Extractor.jar" -r $root $extractorname"/inprogress/"$entry
 	fi
 done
