@@ -29,7 +29,7 @@ do
     if test `find $root"crops/"$crop"/loader/instructions/"$entry -mmin $time`
     then
 	loadername=$root"crops/"$crop"/loader"
-	mv $loadername"/instructions/"$entry $loadername"/inprogress/"$entry
+	mv $loadername"/instructions/"$entry $loadername"/inprogress/"$entry || exit 1
 	java -jar $root"core/Digester.jar" -r $root $loadername"/inprogress/"$entry
     fi
 done
