@@ -5,6 +5,7 @@
 # Dec 2021
 # err87@cornell.edu
 # This is a preprocessing script for long-format CSV files from Intertek / LGC-Genomics.
+# Examples of the input format can be found in `./resources`.
 # The input file ($INPUT_FILE) is a series of catenated CSV tables with a short header providing metadata.
 # The tables, including the header, are separated and written to separate files in $OUTPUT_FOLDER.
 # This script performs little or no validation of the input file.
@@ -52,7 +53,8 @@ def main(input_file: str, output_dir: str) -> None:
     :raises HeaderFormatException: When a table name is encountered and the preceding line is non-blank.
     """
     with open(input_file, 'r') as reader:
-        output_file: TextIO = open(f'{output_dir}/header.tsv', 'w')
+        prefix: str = input_file.rsplit('/', 1)[-1].removesuffix('.csv')
+        output_file: TextIO = open(f'{output_dir}/{prefix}.header.tsv', 'w')
         line: str
         idx: int
         last_was_blank: bool = False
@@ -75,15 +77,15 @@ def main(input_file: str, output_dir: str) -> None:
                                            f'but preceding line was not blank.'
                             raise HeaderFormatException(message)
                         else:                                                   # open new fd
-                            output_file = open(f'{output_dir}/{fields[0].lower()}.tsv', 'w')
+                            output_file = open(f'{output_dir}/{prefix}.{fields[0].lower()}.tsv', 'w')
                     else:
                         raise Exception('')
                 else:                                                           # normal processing
                     output_file.write(line.replace(',', '\t'))
         output_file.close()                                                     # close last fd
 
-    header_tsv: str = f'{output_dir}/header.tsv'                                # transpose header file to JSON
-    header_json: str = f'{output_dir}/header.json'
+    header_tsv: str = f'{output_dir}/{prefix}.header.tsv'                       # transpose header file to JSON
+    header_json: str = f'{output_dir}/{prefix}.header.json'
     json_dict: dict = {}
     with open(header_tsv, 'r') as reader:
         for idx, line in enumerate(reader):
