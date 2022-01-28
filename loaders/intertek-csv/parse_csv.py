@@ -20,9 +20,7 @@ from argparse import ArgumentParser, Namespace
 
 
 class Tables(Enum):
-    """
-    Valid table headers.
-    """
+    """Valid table headers."""
     SNPs = auto()
     Scaling = auto()
     Data = auto()
