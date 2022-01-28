@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-# python 3.9.7
+#!/usr/bin/env python3.10
 """
     Evan R Rees
     Dec 2021
