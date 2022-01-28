@@ -1,14 +1,17 @@
 #!/usr/bin/env python
 # python 3.9.7
+"""
+    Evan R Rees
+    Dec 2021
+    err87@cornell.edu
 
-# Evan R Rees
-# Dec 2021
-# err87@cornell.edu
-# This is a preprocessing script for long-format CSV files from Intertek / LGC-Genomics.
-# Examples of the input format can be found in `./resources`.
-# The input file ($INPUT_FILE) is a series of catenated CSV tables with a short header providing metadata.
-# The tables, including the header, are separated and written to separate files in $OUTPUT_FOLDER.
-# This script performs little or no validation of the input file.
+    This is a preprocessing script for long-format CSV files from Intertek / LGC-Genomics.
+    Examples of the input format can be found in `./resources`.
+    The input file ($INPUT_FILE) is a series of catenated CSV tables with a short header providing metadata.
+    The tables, including the header, are separated and written to separate files in $OUTPUT_FOLDER.
+    This script performs little or no validation of the input file.
+
+"""
 
 import json
 from typing import TextIO
