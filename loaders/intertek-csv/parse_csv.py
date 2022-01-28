@@ -13,7 +13,6 @@
 
 """
 
-import json
 from typing import TextIO
 from enum import Enum, auto
 from argparse import ArgumentParser, Namespace
@@ -85,15 +84,6 @@ def main(input_file: str, output_dir: str) -> None:
                     output_file.write(line.replace(',', '\t'))
         output_file.close()                                                     # close last fd
 
-    header_tsv: str = f'{output_dir}/{prefix}.header.tsv'                       # transpose header file to JSON
-    header_json: str = f'{output_dir}/{prefix}.header.json'
-    json_dict: dict = {}
-    with open(header_tsv, 'r') as reader:
-        for idx, line in enumerate(reader):
-            fields: list[str] = line.strip().split('\t')                        # some header values are enquoted
-            json_dict[fields[0]] = fields[1].strip('"') if (len(fields) == 2) else ''
-    with open(header_json, 'w') as writer:
-        json.dump(json_dict, writer)
 
 
 if __name__ == '__main__':
