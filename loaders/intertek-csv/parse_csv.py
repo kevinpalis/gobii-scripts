@@ -43,7 +43,7 @@ class FileFormatException(Exception):
     pass
 
 
-def main(input_file: str, output_dir: str) -> None:
+def extract_csvs(input_file: str, output_dir: str) -> None:
     """
     Extract and write TSV tables from Intertek / LGC-Genomics long-format concatenated CSV file.
 
@@ -51,24 +51,22 @@ def main(input_file: str, output_dir: str) -> None:
     :param output_dir: Directory in which to write output files.
     :raises FileFormatException: When either of the first two lines don't match expectation.
     :raises HeaderFormatException: When a table name is encountered and the preceding line is non-blank.
+    :return: None
     """
     with open(input_file, 'r') as reader:
-        prefix: str = input_file.rsplit('/', 1)[-1].removesuffix('.csv')
-        output_file: TextIO = open(f'{output_dir}/{prefix}.header.tsv', 'w')
-        line: str
+        output_file: TextIO = open(f'{output_dir}/header.tsv', 'w')
         idx: int
+        line: str
         last_was_blank: bool = False
         for idx, line in enumerate(reader):
             if idx < 2:                                                         # validate first two lines
                 if line.strip() != FIRST_LINES[idx]:
                     message: str = f'Unexpected value on line {idx}. Expected {FIRST_LINES[idx]}, found {line}'
                     raise FileFormatException(message)
-            elif line.startswith('#'):                                          # skip comment lines
-                continue
             elif line.isspace():                                                # end of table
                 last_was_blank = True
                 output_file.close()
-            else:                                                               # table header or row
+            elif not line.startswith('#'):                                      # table header or row
                 fields: list[str] = line.strip().split(',')
                 if len(fields) == 1 and 'Header' not in output_file.name:       # normal header processing
                     if fields[0] in Tables.__members__:                         # check header is valid
@@ -77,7 +75,7 @@ def main(input_file: str, output_dir: str) -> None:
                                            f'but preceding line was not blank.'
                             raise HeaderFormatException(message)
                         else:                                                   # open new fd
-                            output_file = open(f'{output_dir}/{prefix}.{fields[0].lower()}.tsv', 'w')
+                            output_file = open(f'{output_dir}/{fields[0].lower()}.tsv', 'w')
                     else:
                         raise Exception('')
                 else:                                                           # normal processing
@@ -85,13 +83,16 @@ def main(input_file: str, output_dir: str) -> None:
         output_file.close()                                                     # close last fd
 
 
-
-if __name__ == '__main__':
+def main() -> None:
+    """Extract and write TSV tables from Intertek / LGC-Genomics long-format concatenated CSV file."""
     parser: ArgumentParser = ArgumentParser(
         description='Extract and write TSV tables from Intertek / LGC-Genomics long-format concatenated CSV file.'
     )
     parser.add_argument('input_file', metavar='CSV', help='CSV file to parse')
     parser.add_argument('output_dir', metavar='OUTPUT_DIR', help='Directory in which to store output')
     args: Namespace = parser.parse_args()
-    main(input_file=args.input_file,
-         output_dir=args.output_dir)
+    extract_csvs(input_file=args.input_file, output_dir=args.output_dir)
+
+
+if __name__ == '__main__':
+    main()
