@@ -70,7 +70,7 @@ main() {
 
   SCRIPT_DIR="$(dirname "$0")"
   CSV="$1"; shift
-  OUTPUT_DIR="$(gmktemp --tmpdir="${LOAD_CSV_TMPDIR:-$TMPDIR}" --directory "$(basename "$CSV" .csv)".XXXXXXXXXX)"
+  OUTPUT_DIR="$(mktemp --tmpdir="${LOAD_CSV_TMPDIR:-${TMPDIR:-/tmp}}" --directory "$(basename "$CSV" .csv)".XXXXXXXXXX)"
 
   print_vars
 
