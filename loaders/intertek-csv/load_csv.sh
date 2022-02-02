@@ -45,14 +45,15 @@ split_csv() {
 }
 
 invoke_ebs_loader() {
+  # depends on global environment variable ${db_pass}
   local CMD
   local TSV
   find "$OUTPUT_DIR" -type f -name "*.tsv" \
     | while read -r TSV; do
-        CMD="java -jar /gobii_bundle/core/EbsLoader.jar -a $(basename "$TSV" .tsv) -i $TSV $*"
-        verbose_print "$CMD"
-        (( LOAD_CSV_DRYRUN )) || eval "$CMD"
-      done
+      CMD="java -jar /gobii_bundle/core/EbsLoader.jar --aspect $(basename "$TSV" .tsv) --inputFile $TSV --dbPassword $db_pass $*"
+      verbose_print "$CMD"
+      ((LOAD_CSV_DRYRUN)) || eval "$CMD"
+    done
 }
 
 main() {
