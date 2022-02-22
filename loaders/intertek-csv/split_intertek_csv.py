@@ -11,7 +11,6 @@
     This script performs little or no validation of the input file.
 
 """
-
 from typing import TextIO
 from enum import Enum, auto
 from argparse import ArgumentParser, Namespace
@@ -128,8 +127,8 @@ def reformat_tables(split_tables: dict[Tables, str], output_dir: str) -> dict[Re
 
     # write output files
     output_files = {e: f'{output_dir}/{e.file_name()}' for e in Reshaped}
-    snps.to_csv(output_files[Reshaped.Markers])
-    grid.to_csv(output_files[Reshaped.Grid])
+    snps.to_csv(output_files[Reshaped.Markers], sep='\t')
+    grid.to_csv(output_files[Reshaped.Grid], sep='\t')
     return output_files
 
 
@@ -140,12 +139,15 @@ def main() -> None:
     )
     parser.add_argument('input_file', metavar='CSV', help='CSV file to parse')
     parser.add_argument('output_dir', metavar='OUTPUT_DIR', help='Directory in which to store output')
+
     args: Namespace = parser.parse_args()
     print("Arguments:")
     print('\n'.join(f'\t{k:12} {v}' for k, v in args.__dict__.items()))
+
     split_tables = extract_csvs(input_file=args.input_file, output_dir=args.output_dir)
     print("Split tables:")
     print('\n'.join(f'\t{k.name:12} {v}' for k, v in split_tables.items()))
+
     reshaped_tables = reformat_tables(split_tables=split_tables, output_dir=args.output_dir)
     print("Reshaped tables for loading:")
     print('\n'.join(f'\t{k.name:12} {v}' for k, v in reshaped_tables.items()))
