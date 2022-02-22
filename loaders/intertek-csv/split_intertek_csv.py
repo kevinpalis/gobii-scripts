@@ -128,8 +128,8 @@ def reformat_tables(split_tables: dict[Tables, str], output_dir: str) -> dict[Re
 
     # write output files
     output_files = {e: f'{output_dir}/{e.file_name()}' for e in Reshaped}
-    snps.to_csv(output_files[Reshaped.Markers], sep='\t')
-    grid.to_csv(output_files[Reshaped.Grid], sep='\t')
+    snps.to_csv(output_files[Reshaped.Markers], sep='\t', index=False)
+    grid.to_csv(output_files[Reshaped.Grid], sep='\t', index=False)
     return output_files
 
 
