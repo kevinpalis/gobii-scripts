@@ -39,7 +39,7 @@ print_vars() {
 }
 
 split_csv() {
-  local CMD="$SCRIPT_DIR/parse_csv.py $CSV $OUTPUT_DIR"
+  local CMD="$SCRIPT_DIR/split_intertek_csv.py $CSV $OUTPUT_DIR"
   verbose_print "$CMD"
   eval "$CMD"
 }
@@ -48,12 +48,31 @@ invoke_ebs_loader() {
   # depends on global environment variable ${db_pass}
   local CMD
   local TSV
-  find "$OUTPUT_DIR" -type f -name "*.tsv" \
-    | while read -r TSV; do
-      CMD="java -jar /gobii_bundle/core/EbsLoader.jar --aspect $(basename "$TSV" .tsv) --inputFile $TSV --dbPassword $db_pass $*"
-      verbose_print "$CMD"
-      ((LOAD_CSV_DRYRUN)) || eval "$CMD"
-    done
+
+  if (( $# < 2 )); then
+    verbose_print "Insufficient arguments to 'invoke_ebs_loader()'. Expected 2, found $#."
+    exit 1
+  fi
+
+  local MARKER_FILE="$1"
+  local GRID_FILE="$2"
+  shift 2
+
+  if ! [[ -f $MARKER_FILE ]]; then
+    echo "Marker file $MARKER_FILE not found. Exiting."
+    exit 1
+  elif ! [[ -f $GRID_FILE ]]; then
+    echo "Grid file $GRID_FILE not found. Exiting."
+    exit 1
+  fi
+
+  # TODO: pass project, experiment, and dataset as arguments to EBSLoader.jar
+  for TSV in "$MARKER_FILE" "$GRID_FILE"; do
+    CMD="java -jar /gobii_bundle/core/EbsLoader.jar --aspect $(basename "$TSV" .tsv) --inputFile $TSV --dbPassword $db_pass $*"
+    verbose_print "$CMD"
+    ((LOAD_CSV_DRYRUN)) || eval "$CMD"
+  done
+
 }
 
 main() {
@@ -76,8 +95,9 @@ main() {
   print_vars
 
   verbose_print "### INVOKING COMMANDS"
-  split_csv
-  invoke_ebs_loader "$@"
+  read -ra RESHAPED <<<"$(split_csv)"
+
+  invoke_ebs_loader "${RESHAPED[@]}" "$@"
 
 }
 

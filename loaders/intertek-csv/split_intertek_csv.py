@@ -15,6 +15,7 @@ from typing import TextIO
 from enum import Enum, auto
 from argparse import ArgumentParser, Namespace
 import pandas as pd
+import sys
 
 
 class Tables(Enum):
@@ -141,16 +142,18 @@ def main() -> None:
     parser.add_argument('output_dir', metavar='OUTPUT_DIR', help='Directory in which to store output')
 
     args: Namespace = parser.parse_args()
-    print("Arguments:")
-    print('\n'.join(f'\t{k:12} {v}' for k, v in args.__dict__.items()))
+    print("Arguments:", file=sys.stderr)
+    print('\n'.join(f'  {k:12} {v}' for k, v in args.__dict__.items()), file=sys.stderr)
 
     split_tables = extract_csvs(input_file=args.input_file, output_dir=args.output_dir)
-    print("Split tables:")
-    print('\n'.join(f'\t{k.name:12} {v}' for k, v in split_tables.items()))
+    print("Split tables:", file=sys.stderr)
+    print('\n'.join(f'  {k.name:12} {v}' for k, v in split_tables.items()), file=sys.stderr)
 
     reshaped_tables = reformat_tables(split_tables=split_tables, output_dir=args.output_dir)
-    print("Reshaped tables for loading:")
-    print('\n'.join(f'\t{k.name:12} {v}' for k, v in reshaped_tables.items()))
+    print("Reshaped tables for loading:", file=sys.stderr)
+    print('\n'.join(f'  {k.name:12} {v}' for k, v in reshaped_tables.items()), file=sys.stderr)
+
+    print(*reshaped_tables.values(), sep=' ')
 
 
 if __name__ == '__main__':
