@@ -1,42 +1,12 @@
 {
   "aspects": {
     "marker": {
-      "platform_id": [
-        "CONSTANT",
-        "1"
-      ],
-      "status": [
-        "CONSTANT",
-        "57"
-      ],
-      "name": [
-        "ROW",
-        {
-          "row": 0,
-          "column": 5
-        }
-      ],
-      "ref": [
-        "COLUMN",
-        {
-          "row": 1,
-          "column": 2
-        }
-      ],
-      "alts": [
-        "COLUMN",
-        {
-          "row": 1,
-          "column": 3
-        }
-      ],
-      "sequence": [
-        "COLUMN",
-        {
-          "row": 1,
-          "column": 4
-        }
-      ]
+      "platform_id": ["CONSTANT", "1"],
+      "status": ["CONSTANT","57"],
+      "name": ["COLUMN", {"row": 1, "column": 5}],
+      "ref": ["COLUMN", {"row": 1, "column": 2}],
+      "alts": ["COLUMN", {"row": 1, "column": 3}],
+      "sequence": ["COLUMN", {"row": 1, "column": 4}]
     }
   }
 }
