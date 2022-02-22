@@ -49,26 +49,15 @@ invoke_ebs_loader() {
   local CMD
   local TSV
 
-  if (( $# < 2 )); then
-    verbose_print "Insufficient arguments to 'invoke_ebs_loader()'. Expected 2, found $#."
-    exit 1
-  fi
-
-  local MARKER_FILE="$1"
-  local GRID_FILE="$2"
-  shift 2
-
-  if ! [[ -f $MARKER_FILE ]]; then
-    echo "Marker file $MARKER_FILE not found. Exiting."
-    exit 1
-  elif ! [[ -f $GRID_FILE ]]; then
-    echo "Grid file $GRID_FILE not found. Exiting."
-    exit 1
-  fi
-
-  # TODO: pass project, experiment, and dataset as arguments to EBSLoader.jar
   for TSV in "$MARKER_FILE" "$GRID_FILE"; do
-    CMD="java -jar /gobii_bundle/core/EbsLoader.jar --aspect $(basename "$TSV" .tsv) --inputFile $TSV --dbPassword $db_pass $*"
+    CMD="java -jar /gobii_bundle/core/EbsLoader.jar"
+    CMD+=" --aspect $(basename "$TSV" .tsv)"
+    CMD+=" --inputFile $TSV"
+    CMD+=" --dbPassword $db_pass"
+    CMD+=" --Project $PROJECT_NUMBER"
+    CMD+=" --Experiment $PROJECT_NUMBER"
+    CMD+=" --Dataset $PROJECT_NUMBER"
+    CMD+=" $*"
     verbose_print "$CMD"
     ((LOAD_CSV_DRYRUN)) || eval "$CMD"
   done
@@ -95,9 +84,9 @@ main() {
   print_vars
 
   verbose_print "### INVOKING COMMANDS"
-  read -ra RESHAPED <<<"$(split_csv)"
+  read -r PROJECT_NUMBER MARKER_FILE GRID_FILE <<<"$(split_csv)"
 
-  invoke_ebs_loader "${RESHAPED[@]}" "$@"
+  invoke_ebs_loader "$@"
 
 }
 

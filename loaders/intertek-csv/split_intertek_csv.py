@@ -133,6 +133,15 @@ def reformat_tables(split_tables: dict[Tables, str], output_dir: str) -> dict[Re
     return output_files
 
 
+def get_project_number(header_file: str) -> str:
+    header = pd.read_csv(header_file, header=None, names=['key', 'value'], delimiter='\t', index_col=0)
+    try:
+        return header.loc['Project number', 'value']
+    except KeyError:
+        print("Could not find 'Project number' in header table.")
+        exit(1)
+
+
 def main() -> None:
     """Extract and write TSV tables from Intertek / LGC-Genomics long-format concatenated CSV file."""
     parser: ArgumentParser = ArgumentParser(
@@ -153,7 +162,9 @@ def main() -> None:
     print("Reshaped tables for loading:", file=sys.stderr)
     print('\n'.join(f'  {k.name:12} {v}' for k, v in reshaped_tables.items()), file=sys.stderr)
 
-    print(*reshaped_tables.values(), sep=' ')
+    project_number = get_project_number(split_tables[Tables.Header])
+
+    print(project_number, *reshaped_tables.values(), sep=' ')
 
 
 if __name__ == '__main__':
