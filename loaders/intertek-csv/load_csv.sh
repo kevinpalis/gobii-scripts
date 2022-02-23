@@ -39,7 +39,7 @@ print_vars() {
 }
 
 split_csv() {
-  local CMD="$SCRIPT_DIR/parse_csv.py $CSV $OUTPUT_DIR"
+  local CMD="$SCRIPT_DIR/split_intertek_csv.py $CSV $OUTPUT_DIR"
   verbose_print "$CMD"
   eval "$CMD"
 }
@@ -48,12 +48,20 @@ invoke_ebs_loader() {
   # depends on global environment variable ${db_pass}
   local CMD
   local TSV
-  find "$OUTPUT_DIR" -type f -name "*.tsv" \
-    | while read -r TSV; do
-      CMD="java -jar /gobii_bundle/core/EbsLoader.jar --aspect $(basename "$TSV" .tsv) --inputFile $TSV --dbPassword $db_pass $*"
-      verbose_print "$CMD"
-      ((LOAD_CSV_DRYRUN)) || eval "$CMD"
-    done
+
+  for TSV in "$MARKER_FILE" "$GRID_FILE"; do
+    CMD="java -jar /gobii_bundle/core/EbsLoader.jar"
+    CMD+=" --aspect $(basename "$TSV" .tsv)"
+    CMD+=" --inputFile $TSV"
+    CMD+=" --dbPassword $db_pass"
+    CMD+=" --Project $PROJECT_NUMBER"
+    CMD+=" --Experiment $PROJECT_NUMBER"
+    CMD+=" --Dataset $PROJECT_NUMBER"
+    CMD+=" $*"
+    verbose_print "$CMD"
+    ((LOAD_CSV_DRYRUN)) || eval "$CMD"
+  done
+
 }
 
 main() {
@@ -76,7 +84,8 @@ main() {
   print_vars
 
   verbose_print "### INVOKING COMMANDS"
-  split_csv
+  read -r PROJECT_NUMBER MARKER_FILE GRID_FILE <<<"$(split_csv)"
+
   invoke_ebs_loader "$@"
 
 }

@@ -1,0 +1,42 @@
+{
+  "aspects": {
+    "matrix": {
+      "matrix": ["MATRIX",{"row": 1, "column": 5, "datasetType":"NUCLEOTIDE_2_LETTER"}]
+    },
+    "germplasm": {
+      "name": ["COLUMN", {"row": 1, "column": 0}],
+      "external_code": ["COLUMN", {"row": 1, "column": 0}],
+      "status": ["CONSTANT","57"]
+    },
+    "dnasample": {
+      "project_id": ["CONSTANT","1000"],
+      "name": ["COLUMN", {"row": 1, "column": 0}],
+      "external_code": ["COLUMN", {"row": 1, "column": 0}],
+      "num": ["COLUMN", {"row": 1, "column": 0}],
+      "status": ["CONSTANT","57"],
+      "uuid": ["COLUMN", {"row": 1, "column": 0}],
+      "plate_name":["COLUMN", {"row":1,"column": 1}],
+      "well_row":["COLUMN", {"row": 1, "column": 3}],
+      "well_col":["COLUMN", {"row": 1, "column": 4}]
+    },
+    "dnarun": {
+      "project_id": ["CONSTANT","1"],
+      "experiment_id":  ["CONSTANT","1"],
+      "dnasample_name": ["COLUMN", {"row": 1, "column": 0}],
+      "name": ["COLUMN", {"row": 1, "column": 0}]
+    },
+    "dataset_dnarun": {
+      "platform_id": ["CONSTANT", "1"],
+      "experiment_id": ["CONSTANT", "1"],
+      "dataset_id": ["CONSTANT", "1"],
+      "dnarun_name": ["COLUMN", {"row": 1, "column": 0}],
+      "dnarun_idx": ["RANGE", "0"]
+    },
+    "dataset_marker": {
+      "platform_id": ["CONSTANT", "1"],
+      "dataset_id": ["CONSTANT", "1"],
+      "marker_name": ["ROW", {"row": 0, "column": 5}],
+      "marker_idx": ["RANGE", "0"]
+    }
+  }
+}
