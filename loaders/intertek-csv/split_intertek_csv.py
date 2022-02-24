@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.9
+#!/usr/bin/env python3.6
 """
     Evan R Rees
     Dec 2021
@@ -11,7 +11,7 @@
     This script performs little or no validation of the input file.
 
 """
-from typing import TextIO
+from typing import TextIO, List, Dict
 from enum import Enum, auto
 from argparse import ArgumentParser, Namespace
 import pandas as pd
@@ -40,7 +40,7 @@ class Reshaped(Enum):
         return f"{self.name.lower()}.tsv"
 
 
-FIRST_LINES: list[str] = [                                      # expected values on first two lines of file
+FIRST_LINES: List[str] = [                                      # expected values on first two lines of file
     'KBiosciences genotyping report',
     'LGC-Genomics'
 ]
@@ -56,7 +56,7 @@ class FileFormatException(Exception):
     pass
 
 
-def extract_csvs(input_file: str, output_dir: str) -> dict[Tables, str]:
+def extract_csvs(input_file: str, output_dir: str) -> Dict[Tables, str]:
     """
     Extract and write TSV tables from Intertek / LGC-Genomics long-format concatenated CSV file.
 
@@ -66,7 +66,7 @@ def extract_csvs(input_file: str, output_dir: str) -> dict[Tables, str]:
     :raises HeaderFormatException: When a table name is encountered and the preceding line is non-blank.
     :return: None
     """
-    output_file_names: dict[Tables, str] = {}
+    output_file_names: Dict[Tables, str] = {}
     with open(input_file, 'r') as reader:
         table = Tables.Header
         output_file_names[table] = f'{output_dir}/{table.file_name()}'
@@ -102,7 +102,7 @@ def extract_csvs(input_file: str, output_dir: str) -> dict[Tables, str]:
         return output_file_names
 
 
-def reformat_tables(split_tables: dict[Tables, str], output_dir: str) -> dict[Reshaped, str]:
+def reformat_tables(split_tables: Dict[Tables, str], output_dir: str) -> Dict[Reshaped, str]:
     """Reformat input tables into genotyping grid and marker metadata"""
 
     data = pd.read_csv(split_tables[Tables.Data], delimiter='\t', dtype=str)
