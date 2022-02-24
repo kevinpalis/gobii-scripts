@@ -84,7 +84,7 @@ main() {
   print_vars
 
   verbose_print "### INVOKING COMMANDS"
-  read -r PROJECT_NUMBER MARKER_FILE GRID_FILE <<<"$(split_csv)"
+  read -r PROJECT_NUMBER GRID_FILE MARKER_FILE <<<"$(split_csv)"
 
   invoke_ebs_loader "$@"
 
