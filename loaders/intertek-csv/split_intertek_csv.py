@@ -110,7 +110,9 @@ def reformat_tables(split_tables: Dict[Tables, str], output_dir: str) -> Dict[Re
     snps = pd.read_csv(split_tables[Tables.SNPs], delimiter='\t', dtype=str)
 
     # add marker_name column as concatenation of SNPID and SNPNum
-    snps['marker_name'] = snps[['SNPID', 'SNPNum']].agg('_'.join, axis=1)
+    marker_name_col = snps[['SNPID', 'SNPNum']].agg('_'.join, axis=1)
+    # and make sure it's in the 5th position so floating 'extra' fields don't bump it - JDLS
+    snps.insert(5,'marker_name',marker_name_col)
 
     # split masterwell into well row and column
     data[['well_row', 'well_col']] = data['MasterWell'].str.extract(r'([A-H])(\d+)')
