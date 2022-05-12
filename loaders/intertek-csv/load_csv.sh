@@ -25,7 +25,10 @@ EOF
 }
 
 verbose_print() {
-  (( ${LOAD_CSV_VERBOSE:-0} )) && echo -e "$*" > /dev/stderr
+    if [  ${LOAD_CSV_VERBOSE} -gt 0 ];
+       then
+        echo  $@
+    fi
 }
 
 print_vars() {
